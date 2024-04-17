@@ -3,15 +3,16 @@ document.addEventListener(`DOMContentLoaded`, function(){
 const searchbar = document.querySelector(`.search-bar`);
 const searchbtn = document.querySelector(`.search-btn`);
 
-searchbtn.addEventListener(`click`, function(event){
-    event.preventDefault();
-    const city = searchbar.value;
+const form = document.querySelector(`.search-bar`);
 
+
+
+function fetchdata(city){
     fetch(`http://api.weatherapi.com/v1/current.json?key=f767b142d9b54e01b9b200154241604&q=${city}&aqi=no`)
     .then(response => response.json())
     .then(data => {
         document.querySelector(`.Location`).textContent = data.location.name;
-        document.querySelector(`.Temperature`).textContent = data.current.temp_f + `°F`;
+        document.querySelector(`.Temperature`).textContent = Math.round(data.current.temp_f) + `°F`;
         switch(data.current.condition.text){
             case `Sunny`:
                 document.querySelector(`.weather-icon`).textContent = `☀️`;
@@ -211,9 +212,25 @@ searchbtn.addEventListener(`click`, function(event){
                 break;
 
         }
-
+        
+        fetch(`http://api.weatherapi.com/v1/forecast.json?key=f767b142d9b54e01b9b200154241604&q=${city}&days=1&aqi=no&alerts=no`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector(`.high-low`).textContent = 'H:' + Math.round(data.forecast.forecastday[0].day.maxtemp_f) + '° |' + ' L:' + Math.round(data.forecast.forecastday[0].day.mintemp_f) + '°';
         })
+    })
+};
 
+form.addEventListener(`submit`, (event) => {
+    event.preventDefault();
+    const city = searchbar.value;
+    fetchdata(searchbar.value);
+});
+
+searchbtn.addEventListener(`click`,(event) =>{
+    event.preventDefault();
+    const city = searchbar.value;
+    fetchdata(searchbar.value);
 });
 
 
