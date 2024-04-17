@@ -44,7 +44,6 @@ body{
 
 .search input::placeholder{
     color: #00000082;
-    text-indent: 10px;
 }
 
 .search button{
@@ -87,7 +86,7 @@ body{
     margin-bottom: none;
 }
 
-.Description{
+.Condition{
     font-size: 25px;
     font-weight: 500;
     color: #fff;
